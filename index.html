@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tech Meeting - Event Registration</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Glowvai Tech Meeting 2025</h1>
+            <p class="subtitle">Event Registration Form</p>
+        </header>
+
+        <main class="main-content">
+            <!-- Registration Form Section -->
+            <section class="form-section">
+                <h2>Register for the Event</h2>
+                <form id="registrationForm" class="registration-form">
+                    <div class="form-group">
+                        <label for="fullName">Full Name *</label>
+                        <input type="text" id="fullName" name="fullName" placeholder="Enter your full name" required>
+                        <span class="error-message" id="nameError"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email Address *</label>
+                        <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                        <span class="error-message" id="emailError"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="company">Company/Organization *</label>
+                        <input type="text" id="company" name="company" placeholder="Enter your company" required>
+                        <span class="error-message" id="companyError"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="jobTitle">Job Title/Role *</label>
+                        <input type="text" id="jobTitle" name="jobTitle" placeholder="Enter your job title" required>
+                        <span class="error-message" id="jobTitleError"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" name="phone" placeholder="Enter your phone number">
+                        <span class="error-message" id="phoneError"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="dietary">Dietary Preferences</label>
+                        <select id="dietary" name="dietary">
+                            <option value="">Select dietary preference</option>
+                            <option value="no-preference">No Preference</option>
+                            <option value="vegetarian">Vegetarian</option>
+                            <option value="vegan">Vegan</option>
+                            <option value="gluten-free">Gluten-Free</option>
+                            <option value="halal">Halal</option>
+                            <option value="kosher">Kosher</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="comments">Additional Comments</label>
+                        <textarea id="comments" name="comments" placeholder="Any additional information..." rows="4"></textarea>
+                    </div>
+
+                    <div class="form-group checkbox">
+                        <input type="checkbox" id="termsCheckbox" name="terms" required>
+                        <label for="termsCheckbox">I agree to the event terms and conditions *</label>
+                        <span class="error-message" id="termsError"></span>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Register</button>
+                    <button type="reset" class="btn btn-secondary">Clear Form</button>
+                </form>
+            </section>
+
+            <!-- Registered Participants Section -->
+            <section class="participants-section">
+                <h2>Registered Participants</h2>
+                <div class="stats">
+                    <div class="stat-card">
+                        <span class="stat-number" id="participantCount">0</span>
+                        <span class="stat-label">Total Registrations</span>
+                    </div>
+                </div>
+
+                <div id="participantsList" class="participants-list">
+                    <p class="no-data">No participants registered yet.</p>
+                </div>
+
+                <button id="exportBtn" class="btn btn-export" style="display: none;">Export to CSV</button>
+                <button id="clearAllBtn" class="btn btn-danger" style="display: none;">Clear All Data</button>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <p>&copy; 2025 Tech Meeting. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <!-- Meetings Modal -->
+    <div id="meetingsModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Select Your Meeting Location</h2>
+                <button class="modal-close" onclick="closeMeetingsModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p class="modal-subtitle">Choose which city you'd like to attend:</p>
+                <div class="meetings-grid" id="meetingsGrid">
+                    <!-- Meetings will be populated here -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeMeetingsModal()">Skip for Now</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- QR Code Payment Modal -->
+    <div id="qrCodeModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Payment Required</h2>
+                <button class="modal-close" onclick="closeQRModal()">&times;</button>
+            </div>
+            <div class="modal-body qr-modal-body">
+                <div class="qr-container">
+                    <div class="phonepe-header">
+                        <div class="phonepe-logo">📱</div>
+                        <h3>PhonePe Payment</h3>
+                    </div>
+                    <div class="accepted-here">ACCEPTED HERE</div>
+                    <div class="scanner-subtitle">Scan & Pay Using PhonePe App</div>
+                    <p class="meeting-payment-info" id="meetingPaymentInfo"></p>
+                    <div class="qr-code-placeholder" id="qrCodePlaceholder">
+                        <img id="qrCodeImage" class="qr-image" src="phonepe-qr.png" alt="PhonePe QR Code">
+                        <input type="file" id="qrImageFile" accept="image/*" style="display: none;">
+                    </div>
+                    <div class="payment-method">
+                        <span class="payment-method-icon">💜</span>
+                        <span class="payment-method-text">PhonePe Accepted</span>
+                    </div>
+                    <p class="payment-instruction">Scan with PhonePe App to complete payment securely</p>
+                    <div class="payment-amount">
+                        <span>Amount to Pay:</span>
+                        <span class="amount-value" id="paymentAmount">₹599</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeQRModal()">Cancel</button>
+                <button class="btn btn-secondary" id="uploadQrBtn" onclick="triggerQrUpload()">Upload QR Image</button>
+                <button class="btn btn-primary" onclick="proceedToReceipt()">I've Paid, Upload Receipt</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Payment Receipt Upload Modal -->
+    <div id="receiptUploadModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Upload Payment Receipt</h2>
+                <button class="modal-close" onclick="closeReceiptModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p class="modal-subtitle">Please upload a screenshot or photo of your payment receipt:</p>
+                <div class="upload-area" id="uploadArea">
+                    <input type="file" id="receiptFile" accept="image/*" style="display: none;">
+                    <div class="upload-content">
+                        <span class="upload-icon">📁</span>
+                        <p>Click to select or drag & drop your receipt</p>
+                        <span class="upload-hint">(JPG, PNG, PDF - Max 5MB)</span>
+                    </div>
+                </div>
+                <div id="uploadPreview" style="display: none; margin-top: 20px; text-align: center;">
+                    <img id="previewImage" src="" alt="Preview" style="max-width: 100%; max-height: 300px; border-radius: 8px;">
+                    <p id="uploadedFileName" style="margin-top: 10px; color: var(--text-light);"></p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeReceiptModal()">Cancel</button>
+                <button class="btn btn-primary" id="submitReceiptBtn" onclick="submitReceipt()" disabled>Verify & Generate Receipt</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Meeting Receipt Modal -->
+    <div id="meetingReceiptModal" class="modal hidden">
+        <div class="modal-content receipt-modal">
+            <div class="modal-header receipt-header">
+                <h2>Meeting Confirmation Receipt</h2>
+                <button class="modal-close" onclick="closeMeetingReceiptModal()">&times;</button>
+            </div>
+            <div class="modal-body receipt-body" id="receiptContent">
+                <!-- Receipt content will be populated here -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="printReceipt()">Print Receipt</button>
+                <button class="btn btn-primary" onclick="downloadReceipt()">Download PDF</button>
+                <button class="btn btn-success" onclick="closeMeetingReceiptModal()">Done</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Overlay -->
+    <div id="modalOverlay" class="modal-overlay hidden" onclick="handleOverlayClick()"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
